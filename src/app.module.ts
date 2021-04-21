@@ -8,6 +8,7 @@ import * as ModuleConfig from 'src/config/module.config';
 import { ScrapingModule } from './modules/scraping/scraping.module';
 import { LoggerModule } from './modules/logger/logger.module';
 import { AppController } from './app.controller';
+import { TasksModule } from './shared/tasks/tasks.module';
 
 @Module({
 	imports: [
@@ -20,6 +21,7 @@ import { AppController } from './app.controller';
 		EventEmitterModule.forRoot(),
 		ScrapingModule,
 		LoggerModule,
+		TasksModule,
 	],
 	controllers: [AppController],
 })

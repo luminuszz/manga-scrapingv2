@@ -4,6 +4,7 @@ import { createPDf } from '../jobs';
 import { Injectable } from '@nestjs/common';
 import * as puppeteer from 'puppeteer';
 import { join } from 'path';
+import { TaskService } from 'src/shared/tasks/task.service';
 
 type CapData = {
 	pageNumber: number;
@@ -19,6 +20,8 @@ export interface JobData {
 @Processor(createPDf.name)
 @Injectable()
 export class CreatePdfConsumer {
+	constructor(private readonly taskService: TaskService) {}
+
 	private getBrowser = async () =>
 		puppeteer.launch({
 			headless: true,
@@ -48,10 +51,24 @@ export class CreatePdfConsumer {
 
 			const parsedTitle = title.trim().replace(' ', '');
 
+			const dateIsoId = new Date().toString();
+
+			const filePath = join(
+				__dirname,
+				'..',
+				'..',
+				'..',
+				'..',
+				'temp',
+				`${dateIsoId}-${parsedTitle}-cap-${cap}.pdf`,
+			);
+
 			await page.pdf({
-				path: join(__dirname, '..', '..', '..', '..', 'temp', `${parsedTitle}-cap-${cap}.pdf`),
+				path: filePath,
 				format: 'a4',
 			});
+
+			this.taskService.deleteFile(filePath);
 		} catch (error) {
 			console.log(error.message);
 		} finally {

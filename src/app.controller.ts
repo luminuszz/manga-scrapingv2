@@ -12,7 +12,6 @@ export class AppController {
 		const verifyExistsFile = fs.existsSync(baseTempPathFile);
 
 		if (!verifyExistsFile) {
-			('passou aqui');
 			return response.status(404).json({
 				message: 'file not found',
 			});
