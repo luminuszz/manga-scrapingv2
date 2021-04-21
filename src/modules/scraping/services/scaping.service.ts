@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import * as puppeteer from 'puppeteer';
+import { LoggerGateway } from 'src/modules/logger/gateway/logger.gateway';
 
 interface Payload {
 	capUrl: string;
@@ -17,18 +18,6 @@ type SelectorKeys =
 	| 'title'
 	| 'currentPage';
 
-/**
- * capNumber: @number atribute 'reader-current-chapter' - check
- * orientationButton: class 'orientation' - check
- * previousPageButton: class 'page-previous' - check
- * nextPageButton: class 'class="page-next"' - check
- * totalOfPages : atribute reader-total-pages - check
- * authors: class 'author' - check
- * title: class "title" - check
- * mangaImg: class "manga-image"
- *
- */
-
 type CapData = {
 	pageNumber: number;
 	mangaImg: string;
@@ -44,6 +33,8 @@ export interface CapExtract {
 
 @Injectable()
 export class CapScrappingService {
+	constructor(private loggerService: LoggerGateway) {}
+
 	private selectorKeys: Record<SelectorKeys, string> = {
 		capNumber: 'em[reader-current-chapter]',
 		orientationButton: '.orientation',
@@ -58,7 +49,7 @@ export class CapScrappingService {
 
 	private getBrowser = async () =>
 		await puppeteer.launch({
-			headless: false,
+			headless: true,
 		});
 
 	private extractPageInformation = async (page: puppeteer.Page) => {
@@ -102,11 +93,17 @@ export class CapScrappingService {
 		try {
 			const page = await browser.newPage();
 
+			this.loggerService.createLog('Fazendo busca do mangá....');
+
 			await page.goto(capUrl, {
 				waitUntil: 'networkidle2',
 			});
 
+			this.loggerService.createLog('mangá encontrado, fazendo extração de paginas');
+
 			const response = await this.extractPageInformation(page);
+
+			this.loggerService.createLog('Dados extraídos, gerando PDF.... ');
 
 			return response;
 		} catch (error) {

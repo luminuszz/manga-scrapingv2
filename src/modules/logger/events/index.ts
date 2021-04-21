@@ -1,4 +1,4 @@
 export enum Events {
-	logger = 'channel@logger',
-	file = 'channel@file',
+	logger = 'channel-logger',
+	file = 'channel-file',
 }

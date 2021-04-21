@@ -20,8 +20,8 @@ import { TasksModule } from './shared/tasks/tasks.module';
 		BullModule.forRoot(ModuleConfig.BullModuleConfig),
 		EventEmitterModule.forRoot(),
 		ScrapingModule,
-		LoggerModule,
 		TasksModule,
+		LoggerModule,
 	],
 	controllers: [AppController],
 })

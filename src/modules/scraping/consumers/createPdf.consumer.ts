@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import * as puppeteer from 'puppeteer';
 import { join } from 'path';
 import { TaskService } from 'src/shared/tasks/task.service';
+import { LoggerGateway } from 'src/modules/logger/gateway/logger.gateway';
 
 type CapData = {
 	pageNumber: number;
@@ -20,7 +21,7 @@ export interface JobData {
 @Processor(createPDf.name)
 @Injectable()
 export class CreatePdfConsumer {
-	constructor(private readonly taskService: TaskService) {}
+	constructor(private readonly taskService: TaskService, private loggerService: LoggerGateway) {}
 
 	private getBrowser = async () =>
 		puppeteer.launch({
@@ -49,9 +50,9 @@ export class CreatePdfConsumer {
 
 			await page.goto(`data:text/html,${document}`);
 
-			const parsedTitle = title.trim().replace(' ', '');
+			const parsedTitle = title.replace(/\s/g, '-');
 
-			const dateIsoId = new Date().toString();
+			const dateIsoId = Date.now();
 
 			const filePath = join(
 				__dirname,
@@ -68,7 +69,15 @@ export class CreatePdfConsumer {
 				format: 'a4',
 			});
 
+			this.loggerService.createLog('PDF gerado com sucesso');
+
+			this.loggerService.createLog('Gerando link para download');
+
 			this.taskService.deleteFile(filePath);
+
+			this.loggerService.createLog('Link com expiração de 2 horas');
+
+			this.loggerService.sendFileUrl(`${dateIsoId}-${parsedTitle}-cap-${cap}.pdf`);
 		} catch (error) {
 			console.log(error.message);
 		} finally {

@@ -1,24 +1,24 @@
-import { Injectable } from '@nestjs/common';
-import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-import { Server } from 'socket.io';
+import { WebSocketGateway, WebSocketServer, OnGatewayConnection } from '@nestjs/websockets';
+import { Server, Socket } from 'socket.io';
 import { Events } from '../events';
 
-@WebSocketGateway({ namespace: Events.logger })
-@Injectable()
-export class LoggerGateway {
+@WebSocketGateway({ transports: ['websocket'] })
+export class LoggerGateway implements OnGatewayConnection {
 	@WebSocketServer()
 	private server: Server;
 
-	public async createLog(message: string) {
-		this.emitLog(message);
+	public handleConnection(client: Socket) {
+		console.log(client.id);
 	}
 
-	private emitLog(message: string) {
-		this.server.emit(Events.logger, message);
+	public createLog(message: string) {
+		this.server.emit(Events.logger, {
+			message: message,
+		});
 	}
 
 	public async sendFileUrl(file: string) {
-		const createFileUrl = `http://localhost:300/files/?file=${file}`;
+		const createFileUrl = `http://localhost:3333/files/${file}`;
 
 		this.server.emit(Events.file, createFileUrl);
 	}

@@ -4,7 +4,7 @@ import { Queue } from 'bull';
 import { CredentialsDTO } from './dtos/credentials.dto';
 import { InvoiceJobs } from './dtos/jobs.dto';
 
-@Controller('invoice')
+@Controller('manga')
 export class ScrapingController {
 	constructor(@InjectQueue(InvoiceJobs.getInvoice) private job: Queue<CredentialsDTO>) {}
 
