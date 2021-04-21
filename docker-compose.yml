@@ -1,0 +1,8 @@
+version: '2.0'
+
+services:
+    cache_manager:
+        container_name: api_redis_cache_maneger
+        image: redis
+        ports:
+            - ${REDIS_PORT}:${REDIS_PORT}
