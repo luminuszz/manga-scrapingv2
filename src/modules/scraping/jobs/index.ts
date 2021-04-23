@@ -4,8 +4,4 @@ export const getInvoice = {
 	name: InvoiceJobs.getInvoice,
 };
 
-export const createPDf = {
-	name: InvoiceJobs.createPdf,
-};
-
-export default [getInvoice, createPDf];
+export default [getInvoice];

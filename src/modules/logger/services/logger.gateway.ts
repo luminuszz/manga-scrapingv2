@@ -12,6 +12,8 @@ export class LoggerGateway implements OnGatewayConnection {
 	}
 
 	public createLog(message: string) {
+		console.log(message);
+
 		this.server.emit(Events.logger, {
 			message: message,
 		});
@@ -19,6 +21,8 @@ export class LoggerGateway implements OnGatewayConnection {
 
 	public async sendFileUrl(file: string) {
 		const createFileUrl = `http://localhost:3333/files/${file}`;
+
+		console.log(createFileUrl);
 
 		this.server.emit(Events.file, createFileUrl);
 	}

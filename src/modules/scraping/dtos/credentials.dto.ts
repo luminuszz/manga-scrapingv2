@@ -1,3 +1,3 @@
 export interface CredentialsDTO {
-	capUrl: string;
+	capUrl: string[];
 }

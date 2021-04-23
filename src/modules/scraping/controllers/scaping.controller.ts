@@ -1,8 +1,8 @@
 import { InjectQueue } from '@nestjs/bull';
 import { Controller, Body, Post } from '@nestjs/common';
 import { Queue } from 'bull';
-import { CredentialsDTO } from './dtos/credentials.dto';
-import { InvoiceJobs } from './dtos/jobs.dto';
+import { CredentialsDTO } from '../dtos/credentials.dto';
+import { InvoiceJobs } from '../dtos/jobs.dto';
 
 @Controller('manga')
 export class ScrapingController {

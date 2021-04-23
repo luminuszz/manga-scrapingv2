@@ -3,6 +3,15 @@ import { join } from 'path';
 import { Response as ExpressResponse } from 'express';
 import * as fs from 'fs';
 
+enum Teste {
+	tete1 = 'teste',
+	teste2 = '254',
+}
+
+const strings = Object.keys(Teste).map((key: keyof typeof Teste) => Teste[key]);
+
+console.log('strings', strings);
+
 @Controller()
 export class AppController {
 	@Get('files/:fileName')

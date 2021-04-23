@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { LoggerGateway } from './gateway/logger.gateway';
+import { LoggerGateway } from './services/logger.gateway';
 
 @Module({
 	providers: [LoggerGateway],
