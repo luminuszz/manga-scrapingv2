@@ -9,6 +9,8 @@ import { ScrapingModule } from './modules/scraping/scraping.module';
 import { LoggerModule } from './modules/logger/logger.module';
 import { AppController } from './app.controller';
 import { TasksModule } from './shared/tasks/tasks.module';
+import { StorageModule } from './shared/providers/storage/storage.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
 	imports: [
@@ -22,6 +24,8 @@ import { TasksModule } from './shared/tasks/tasks.module';
 		ScrapingModule,
 		TasksModule,
 		LoggerModule,
+		StorageModule,
+		AuthModule,
 	],
 	controllers: [AppController],
 })
