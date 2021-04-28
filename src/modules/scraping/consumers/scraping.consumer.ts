@@ -103,6 +103,7 @@ export class ScapingConsumer {
 				'..',
 				'..',
 				'..',
+				'..',
 				'temp',
 				`${dateIsoId}-${parsedTitle}-cap-${cap}.pdf`,
 			);

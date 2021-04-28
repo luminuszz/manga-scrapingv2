@@ -1,19 +1,25 @@
-import { Body, Controller, Get, Query, Res, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import express from 'express';
+/* eslint-disable @typescript-eslint/no-empty-function */
+import { Controller, Get, Query, Res } from '@nestjs/common';
+import { Auth } from './decorators/authType.decorator';
+import { Response } from 'express';
+import { GoogleDriveStorageProvider } from 'src/shared/providers/storage/implementations/googleDriveStorage.provider';
 
 @Controller('auth')
 export class AuthController {
-	@UseGuards(AuthGuard('google'))
+	constructor(private readonly googleDriveStorageProvider: GoogleDriveStorageProvider) {}
+
 	@Get('drive')
+	@Auth('drive')
 	async login() {}
 
 	@Get('drive/callback')
-	async callback(@Query('code') code: string) {
-		console.log(code);
+	async callback(@Query('code') code: string, @Res() res: Response) {
+		res.cookie('googleKey', code, {});
 
-		return {
-			message: code,
-		};
+		await this.googleDriveStorageProvider.init(code);
+
+		await this.googleDriveStorageProvider.saveFile();
+
+		return res.redirect('http://localhost:3000');
 	}
 }

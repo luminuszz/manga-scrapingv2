@@ -9,11 +9,7 @@ export class GoogleDriveStrategy extends PassportStrategy(OAuth2Strategy) {
 			clientID: web.client_id,
 			clientSecret: web.client_secret,
 			callbackURL: web.redirect_uris[0],
-			scope: [
-				'https://www.googleapis.com/auth/drive.file',
-				'https://www.googleapis.com/auth/drive.readonly',
-				'https://www.googleapis.com/auth/drive.metadata',
-			],
+			scope: ['https://www.googleapis.com/auth/drive.file'],
 		});
 	}
 }
