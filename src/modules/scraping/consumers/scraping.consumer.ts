@@ -97,16 +97,7 @@ export class ScapingConsumer {
 
 			const dateIsoId = Date.now();
 
-			const filePath = join(
-				__dirname,
-				'..',
-				'..',
-				'..',
-				'..',
-				'..',
-				'temp',
-				`${dateIsoId}-${parsedTitle}-cap-${cap}.pdf`,
-			);
+			const filePath = join(__dirname, '..', 'temp', `${dateIsoId}-${parsedTitle}-cap-${cap}.pdf`);
 
 			await page.pdf({
 				path: filePath,

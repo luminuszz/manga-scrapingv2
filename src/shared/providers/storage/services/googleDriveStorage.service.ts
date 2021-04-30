@@ -9,7 +9,7 @@ import { join } from 'path';
 export class GoogleDriveStorageProvider implements IStorageProvider {
 	private sdk: drive_v3.Drive;
 
-	private folderPath = join(__dirname, '..', '..', '..', '..', '..', '..', 'temp');
+	private folderPath = join(__dirname, '..', 'temp');
 
 	private authCredentials = new google.auth.OAuth2({
 		clientId: web.client_id,

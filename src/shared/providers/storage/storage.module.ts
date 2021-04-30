@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
-import { storageFactory } from './implementations';
-import { StorageService } from './storage.service';
-import { GoogleDriveStorageProvider } from './implementations/googleDriveStorage.provider';
+import { StorageService } from './services/storage.service';
+import { GoogleDriveStorageProvider } from './services/googleDriveStorage.service';
 
 @Module({
-	providers: [storageFactory, StorageService, GoogleDriveStorageProvider],
+	providers: [StorageService, GoogleDriveStorageProvider],
 	exports: [StorageService, GoogleDriveStorageProvider],
 })
 export class StorageModule {}

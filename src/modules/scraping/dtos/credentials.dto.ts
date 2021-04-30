@@ -1,3 +1,3 @@
-export interface CredentialsDTO {
+export interface ScrapingCapDTO {
 	capUrl: string[];
 }

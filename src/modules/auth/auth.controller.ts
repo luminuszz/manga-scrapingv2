@@ -2,7 +2,7 @@
 import { Controller, Get, Query, Res } from '@nestjs/common';
 import { Auth } from './decorators/authType.decorator';
 import { Response } from 'express';
-import { GoogleDriveStorageProvider } from 'src/shared/providers/storage/implementations/googleDriveStorage.provider';
+import { GoogleDriveStorageProvider } from '../../shared/providers/storage/services/googleDriveStorage.service';
 
 @Controller('auth')
 export class AuthController {

@@ -6,10 +6,11 @@ import { consumers } from './consumers';
 import { LoggerModule } from '../logger/logger.module';
 import { TasksModule } from 'src/shared/tasks/tasks.module';
 import { StorageModule } from 'src/shared/providers/storage/storage.module';
+import { ChapterService } from './services/chapter.service';
 
 @Module({
 	imports: [BullModule.registerQueue(...jobs), LoggerModule, TasksModule, StorageModule],
 	controllers: [ScrapingController],
-	providers: [...consumers],
+	providers: [...consumers, ChapterService],
 })
 export class ScrapingModule {}

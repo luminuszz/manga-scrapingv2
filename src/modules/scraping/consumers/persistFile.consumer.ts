@@ -1,7 +1,6 @@
 import { OnQueueActive, OnQueueCompleted, OnQueueFailed, OnQueueProgress, Process, Processor } from '@nestjs/bull';
 import { getInvoice } from '../jobs';
 import { Job } from 'bull';
-import { StorageService } from 'src/shared/providers/storage/storage.service';
 
 interface JobData {
 	capUrl: string[];
@@ -9,8 +8,6 @@ interface JobData {
 
 @Processor(getInvoice.name)
 export class ScapingConsumer {
-	constructor(private readonly storageService: StorageService) {}
-
 	@OnQueueActive()
 	onActive(job: Job) {
 		console.log(`Processing job ${job.id} of type ${job.name} with data ${JSON.stringify(job.data)}...`);
