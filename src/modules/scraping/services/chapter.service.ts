@@ -11,15 +11,23 @@ type Chapter = {
 	id: string;
 };
 
+interface MangaPageScrapingData {
+	chapters: Chapter[];
+	mangaTitle: string;
+	mangaAuthor: string;
+	mangaImag: string;
+}
+
 @Injectable()
 export class ChapterService {
-	private domain = 'https://mangalivre.net';
-
 	private selectors = {
 		chapters: '.full-chapters-list li',
+		mangaTitle: '.series-info .series-title h1',
+		mangaAuthor: '.series-info .series-author',
+		mangaImg: '.cover img',
 	};
 
-	private scrapingChapters: TaskFunction<string, Chapter[]> = async ({ data: mangaPage, page }) => {
+	private scrapingChapters: TaskFunction<string, MangaPageScrapingData> = async ({ data: mangaPage, page }) => {
 		try {
 			await page.goto(mangaPage, {
 				waitUntil: 'networkidle2',
@@ -29,12 +37,23 @@ export class ChapterService {
 				return list.map((chapter) => ({
 					chapterLink: `${chapter.querySelector<HTMLAnchorElement>('[data-id-chapter]').href}`,
 					chapterNumber: chapter.querySelector<HTMLSpanElement>('.cap-text').innerText,
+					publicationData: chapter.querySelector<HTMLSpanElement>('.chapter-date').innerText,
+					scanName: chapter.querySelector<HTMLAnchorElement>('.scanlator-name a').innerText,
 				}));
 			});
 
+			const mangaTitle = await page.$eval(this.selectors.mangaTitle, (element) => element.innerHTML);
+			const mangaAuthor = await page.$$eval(this.selectors.mangaAuthor, (element: any) => element[1].innerText);
+			const mangaImag = await page.$eval(this.selectors.mangaImg, (element: HTMLImageElement) => element.src);
+
 			const formattedChapters = chapters.map((chapter) => ({ ...chapter, id: v4() }));
 
-			return formattedChapters;
+			return {
+				chapters: formattedChapters,
+				mangaAuthor,
+				mangaTitle,
+				mangaImag,
+			};
 		} catch (error) {
 			console.log(error);
 		}
@@ -44,7 +63,7 @@ export class ChapterService {
 		try {
 			const { mangaPage } = payload;
 
-			const cluster: Cluster<string, Chapter[]> = await Cluster.launch({
+			const cluster: Cluster<string, MangaPageScrapingData> = await Cluster.launch({
 				concurrency: Cluster.CONCURRENCY_CONTEXT,
 				maxConcurrency: 10,
 				timeout: 50000000,
@@ -52,14 +71,14 @@ export class ChapterService {
 
 			cluster.task(this.scrapingChapters);
 
-			const chapters = await cluster.execute(mangaPage);
+			const mangaScrapingData = await cluster.execute(mangaPage);
 
 			await cluster.idle();
 
 			await cluster.close();
 
 			return {
-				chapters,
+				mangaScrapingData,
 			};
 		} catch (error) {
 			console.log(error.message);
