@@ -1,6 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { IMailProvider } from './interfaces';
-import { FilePayload } from './dtos/createPayload.dto';
+import { File } from './dtos/createPayload.dto';
+
+interface SendEmailPayload {
+	to: string;
+	description?: string;
+	files: File[];
+}
 
 @Injectable()
 export class MailService {
@@ -8,7 +14,7 @@ export class MailService {
 		console.log(this.mailProvider);
 	}
 
-	async sendFiles(payload: FilePayload) {
-		console.log(payload);
+	async sendEmail({ files, description, to }: SendEmailPayload) {
+		await this.mailProvider.sendEmail(to, description, files);
 	}
 }

@@ -127,6 +127,9 @@ export class ScapingConsumer {
 				concurrency: Cluster.CONCURRENCY_CONTEXT,
 				maxConcurrency: 10,
 				timeout: 50000000,
+				puppeteer: {
+					args: ['--no-sandbox', '--disable-setuid-sandbox'],
+				},
 			});
 
 			const { capUrl } = job.data;

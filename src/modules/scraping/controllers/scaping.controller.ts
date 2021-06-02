@@ -23,7 +23,7 @@ export class ScrapingController {
 	}
 
 	@Post('chapter')
-	async getChapters(@Body() data: FindChaptersDTO) {
+	public async getChapters(@Body() data: FindChaptersDTO): Promise<any> {
 		const { mangaPage } = data;
 
 		const response = await this.chapterService.findChapters({ mangaPage });

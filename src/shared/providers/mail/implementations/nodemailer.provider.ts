@@ -28,7 +28,7 @@ export class NodeMailerProvider implements IMailProvider {
 		} as NodeMailer.TransportOptions);
 	}
 
-	async sendEmail(to: string, subject: string, files?: File): Promise<any> {
+	async sendEmail(to: string, subject: string, files?: File[]): Promise<any> {
 		try {
 			const transport = await this.CreateTransport();
 
